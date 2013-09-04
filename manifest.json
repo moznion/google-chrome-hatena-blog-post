@@ -1,0 +1,13 @@
+{
+	"name":"hateblo",
+	"version":"0.1",
+  "manifest_version": 2,
+	"description":"ちょっとしたはてなブログの更新ができます",
+  "permissions":[
+    "http://local.hatena.ne.jp:3000/"
+  ],
+	"browser_action":{
+		"default_icon":"image/icon.png",
+		"default_popup":"popup.html"
+	}
+}

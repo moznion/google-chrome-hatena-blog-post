@@ -1,0 +1,10 @@
+body {
+  width: 250px;
+  text-align: center;
+}
+textarea {
+  min-height: 100px;
+}
+input#submit {
+  margin-top: 10px;
+}
