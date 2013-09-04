@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="vendor/js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="wsse-js/wsse.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/options.css" />
+    <title>設定</title>
+  </head>
+  <body>
+    <div id="container">
+      <h1><img src="image/icon.png" width="50">はてなブログ</h1>
+      <p>
+        各項目を設定してください．
+      </p>
+        <div>
+          <label>
+            <span class="label">ユーザー名</span>
+            <input type="text" id="userName" size="40" placeholder="ユーザー名" />
+          </label>
+        </div>
+        <div>
+          <label>
+            <span class="label">API キー</span>
+            <input type="text" id="wssePass" size="40" placeholder="API キー" />
+          </label>
+        </div>
+        <div>
+          <label>
+            <span class="label">エンドポイント URL</span>
+            <input type="text" id="endpointUrl" size="80" placeholder="http://.../atom" />
+          </label>
+        </div>
+        <div>
+          <button type="submit" id="save">保存</button>
+        </div>
+      <script src="js/options.js"></script>
+    </div>
+  </body>
+</html>

@@ -1,34 +1,40 @@
-var main;
+var main,
+    setup;
 
 main = function() {
   "use strict";
 
-  var userName    = 'moznion',
-      wssePass    = 'uaiewymixj',
-      endpointUri = 'http://local.hatena.ne.jp:3000/moznion/moznion.e.local.hatena.com:3000/atom',
+  var userName    = localStorage.getItem('userName'),
+      wssePass    = localStorage.getItem('wssePass'),
+      endpointUrl = localStorage.getItem('endpointUrl'),
       wHeader     = wsseHeader(userName, wssePass),
+      constructPostXML,
       serviceDocument,
       blogName;
 
-  $.ajax({
-    url:  endpointUri,
-    type: 'get',
-    headers: {
-      'X-WSSE': wHeader
-    },
-    datatype: 'xml',
-    success: function (xmlData) {
-      serviceDocument = xmlData;
-      blogName = $(serviceDocument).find('title').text();
-      $('<h3>' + blogName + '</h3>').insertAfter('#top');
-    },
-    error: function () {
-      $('body').append('<br><font color="red">Post failed...</font>');
-    }
-  });
+  blogName = localStorage.getItem('blogName');
+  if (!blogName) {
+    $.ajax({
+      url:  endpointUrl,
+      type: 'get',
+      headers: {
+        'X-WSSE': wHeader
+      },
+      datatype: 'xml',
+      success: function (xmlData) {
+        serviceDocument = xmlData;
+        blogName = $(serviceDocument).find('title').text();
+        localStorage.setItem('blogName', blogName);
+        $('<h3>' + blogName + '</h3>').insertAfter('#top');
+      },
+      error: function () {
+      }
+    });
+  } else {
+    $('<h3>' + blogName + '</h3>').insertAfter('#top');
+  }
 
-
-  function constructPostXML (userName, title, body, isDraft) {
+  constructPostXML = function(userName, title, body, isDraft) {
     var xml = '<?xml version="1.0" encoding="utf-8"?>' +
               '<entry xmlns="http://www.w3.org/2005/Atom"' +
                      'xmlns:app="http://www.w3.org/2007/app">' +
@@ -49,7 +55,7 @@ main = function() {
 
     var xml = constructPostXML(userName, title, content, 'no');
     $.ajax({
-      url:  endpointUri + '/entry',
+      url:  endpointUrl + '/entry',
       type: 'post',
       headers: {
         'X-WSSE': wHeader
@@ -66,4 +72,15 @@ main = function() {
     });
   });
 };
-main();
+
+setup = function() {
+  return chrome.tabs.create({
+    url: chrome.extension.getURL('options.html')
+  });
+};
+
+if ((localStorage.getItem('userName') && localStorage.getItem('wssePass') && localStorage.getItem('endpointUrl'))) {
+  main();
+} else {
+  setup();
+}
