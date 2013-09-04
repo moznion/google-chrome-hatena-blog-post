@@ -1,0 +1,3 @@
+[submodule "wsse-js"]
+	path = wsse-js
+	url = git@github.com:vrruiz/wsse-js.git
