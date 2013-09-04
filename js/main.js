@@ -6,7 +6,27 @@ main = function() {
   var userName    = 'moznion',
       wssePass    = 'uaiewymixj',
       endpointUri = 'http://local.hatena.ne.jp:3000/moznion/moznion.e.local.hatena.com:3000/atom',
-      wHeader     = wsseHeader(userName, wssePass);
+      wHeader     = wsseHeader(userName, wssePass),
+      serviceDocument,
+      blogName;
+
+  $.ajax({
+    url:  endpointUri,
+    type: 'get',
+    headers: {
+      'X-WSSE': wHeader
+    },
+    datatype: 'xml',
+    success: function (xmlData) {
+      serviceDocument = xmlData;
+      blogName = $(serviceDocument).find('title').text();
+      $('<h3>' + blogName + '</h3>').insertAfter('#top');
+    },
+    error: function () {
+      $('body').append('<br><font color="red">Post failed...</font>');
+    }
+  });
+
 
   function constructPostXML (userName, title, body, isDraft) {
     var xml = '<?xml version="1.0" encoding="utf-8"?>' +
