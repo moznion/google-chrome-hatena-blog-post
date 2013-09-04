@@ -36,9 +36,13 @@ main = function() {
       },
       contentType: 'text/xml;charset=UTF-8',
       datatype: 'xml',
-      data: xml
-    }).done(function () {
-      console.log('success!');
+      data: xml,
+      success: function () {
+        window.close();
+      },
+      error: function () {
+        $('body').append('<br><font color="red">Post failed...</font>');
+      }
     });
   });
 };
