@@ -7,10 +7,14 @@ main = function() {
   var userName    = localStorage.getItem('userName'),
       apiKey      = localStorage.getItem('apiKey'),
       endpointUrl = localStorage.getItem('endpointUrl'),
+      title       = localStorage.getItem('title'),
+      content     = localStorage.getItem('content'),
       wHeader     = wsseHeader(userName, apiKey),
+      saveContents,
       constructPostXML,
       serviceDocument,
-      blogName;
+      blogName,
+      sever;
 
   blogName = localStorage.getItem('blogName');
   if (!blogName) {
@@ -34,6 +38,9 @@ main = function() {
     $('<h3>' + blogName + '</h3>').insertAfter('#top');
   }
 
+  $('#title').val(title);
+  $('#content').val(content);
+
   constructPostXML = function(userName, title, body, isDraft) {
     var xml = '<?xml version="1.0" encoding="utf-8"?>' +
               '<entry xmlns="http://www.w3.org/2005/Atom"' +
@@ -47,6 +54,16 @@ main = function() {
               '</entry>';
     return xml;
   };
+
+  saveContents = function() {
+    var title, content;
+    title   = $('#title').val();
+    content = $('#content').val();
+
+    localStorage.setItem('title', title);
+    localStorage.setItem('content', content);
+  };
+  sever = setInterval( function () {saveContents();}, 16);
 
   $('#submit').click(function () {
     var title, content;
@@ -64,6 +81,9 @@ main = function() {
       datatype: 'xml',
       data: xml,
       success: function () {
+        clearInterval(sever);
+        localStorage.setItem('title', '');
+        localStorage.setItem('content', '');
         window.close();
       },
       error: function () {
