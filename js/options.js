@@ -1,19 +1,19 @@
 $('#userName').val(localStorage.getItem('userName'));
-$('#wssePass').val(localStorage.getItem('wssePass'));
+$('#apiKey').val(localStorage.getItem('apiKey'));
 $('#endpointUrl').val(localStorage.getItem('endpointUrl'));
 
 $('#save').click(function () {
-  var userName, wssePass, endpointUrl, wHeader;
+  var userName, apiKey, endpointUrl, wHeader;
 
   userName    = $('#userName').val();
-  wssePass    = $('#wssePass').val();
+  apiKey      = $('#apiKey').val();
   endpointUrl = $('#endpointUrl').val();
 
-  if (!(userName && wssePass && endpointUrl)) {
+  if (!(userName && apiKey && endpointUrl)) {
     return false;
   }
 
-  wHeader = wsseHeader(userName, wssePass);
+  wHeader = wsseHeader(userName, apiKey);
   $.ajax({
     url:  endpointUrl,
     type: 'get',
@@ -25,9 +25,9 @@ $('#save').click(function () {
       serviceDocument = xmlData;
       blogName = $(serviceDocument).find('title').text();
 
-      localStorage.setItem('blogName', blogName);
+      localStorage.setItem('blogName',    blogName);
       localStorage.setItem('userName',    userName);
-      localStorage.setItem('wssePass',    wssePass);
+      localStorage.setItem('apiKey',      apiKey);
       localStorage.setItem('endpointUrl', endpointUrl);
 
       $('#save').text('保存しました');

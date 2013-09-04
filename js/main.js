@@ -5,9 +5,9 @@ main = function() {
   "use strict";
 
   var userName    = localStorage.getItem('userName'),
-      wssePass    = localStorage.getItem('wssePass'),
+      apiKey      = localStorage.getItem('apiKey'),
       endpointUrl = localStorage.getItem('endpointUrl'),
-      wHeader     = wsseHeader(userName, wssePass),
+      wHeader     = wsseHeader(userName, apiKey),
       constructPostXML,
       serviceDocument,
       blogName;
@@ -79,7 +79,7 @@ setup = function() {
   });
 };
 
-if ((localStorage.getItem('userName') && localStorage.getItem('wssePass') && localStorage.getItem('endpointUrl'))) {
+if ((localStorage.getItem('userName') && localStorage.getItem('apiKey') && localStorage.getItem('endpointUrl'))) {
   main();
 } else {
   setup();
