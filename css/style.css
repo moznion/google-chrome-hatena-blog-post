@@ -1,10 +1,16 @@
 body {
-  width: 250px;
+  width:      400px;
+  height:     400px;
   text-align: center;
 }
-textarea {
-  min-height: 100px;
+input#title {
+  width: 350px;
 }
-input#submit {
+textarea {
   margin-top: 10px;
+  width:      350px;
+  height:     230px;
+}
+button#submit {
+  margin-top: 20px;
 }
