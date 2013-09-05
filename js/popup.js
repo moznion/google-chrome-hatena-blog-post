@@ -111,6 +111,14 @@ main = function() {
         localStorage.setItem('title', '');
         localStorage.setItem('content', '');
         localStorage.setItem('isDraft', '');
+        // 公開した場合は当該エントリを開く
+        if($('#isDraft:checked').length == 0){
+            $(xml).find('link').each(function(i,val){
+                if($(val).attr('rel') === 'alternate'){
+                    window.open($(val).attr('href'));
+                }
+            });
+        }
         window.close();
       },
       error: function () {
