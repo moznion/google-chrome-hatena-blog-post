@@ -9,6 +9,7 @@ main = function() {
       endpointUrl = localStorage.getItem('endpointUrl'),
       title       = localStorage.getItem('title'),
       content     = localStorage.getItem('content'),
+      isDraft     = localStorage.getItem('isDraft'),
       wHeader     = wsseHeader(userName, apiKey),
       saveContents,
       constructPostXML,
@@ -40,6 +41,7 @@ main = function() {
 
   $('#title').val(title);
   $('#content').val(content);
+  $('#isDraft').val([isDraft]);
 
   constructPostXML = function(userName, title, body, isDraft) {
     var xml = '<?xml version="1.0" encoding="utf-8"?>' +
@@ -56,12 +58,14 @@ main = function() {
   };
 
   saveContents = function() {
-    var title, content;
+    var title, content, isDraft;
     title   = $('#title').val();
     content = $('#content').val();
+    isDraft = $('#isDraft:checked').val();
 
     localStorage.setItem('title', title);
     localStorage.setItem('content', content);
+    localStorage.setItem('isDraft', isDraft);
   };
   sever = setInterval( function () {saveContents();}, 16);
 
@@ -89,6 +93,7 @@ main = function() {
         clearInterval(sever);
         localStorage.setItem('title', '');
         localStorage.setItem('content', '');
+        localStorage.setItem('isDraft', '');
         window.close();
       },
       error: function () {
