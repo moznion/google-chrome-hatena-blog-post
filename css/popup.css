@@ -14,3 +14,8 @@ textarea {
 button#submit {
   margin-top: 20px;
 }
+img#pageInfo {
+  position: absolute;
+  top:      20px;
+  right:    30px;
+}

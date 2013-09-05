@@ -101,6 +101,13 @@ main = function() {
       }
     });
   });
+
+  $('#pageInfo').click(function () {
+    chrome.tabs.getSelected(window.id, function (tab) {
+      var before = $('#content').val();
+      $('#content').val(before + "\n" + tab.title + ' - ' + tab.url);
+    });
+  });
 };
 
 setup = function() {

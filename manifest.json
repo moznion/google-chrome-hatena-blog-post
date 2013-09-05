@@ -5,7 +5,8 @@
 	"description":"ちょっとしたはてなブログの更新ができます",
   "permissions":[
     "http://local.hatena.ne.jp:3000/",
-    "http://blog.hatena.ne.jp/"
+    "http://blog.hatena.ne.jp/",
+    "tabs"
   ],
 	"browser_action":{
 		"default_icon":"image/icon.png",
