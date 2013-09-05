@@ -17,6 +17,18 @@ main = function() {
       blogName,
       sever;
 
+  $.fn.extend({
+      insertAtCaret: function(v) {
+        var o = this.get(0);
+        o.focus();
+        var s = o.value;
+        var p = o.selectionStart;
+        var np = p + v.length;
+        o.value = s.substr(0, p) + v + s.substr(p);
+        o.setSelectionRange(np, np);
+      }
+  });
+
   blogName = localStorage.getItem('blogName');
   if (!blogName) {
     $.ajax({
@@ -109,8 +121,7 @@ main = function() {
 
   $('#pageInfo').click(function () {
     chrome.tabs.getSelected(window.id, function (tab) {
-      var before = $('#content').val();
-      $('#content').val(before + "\n" + tab.title + ' - ' + tab.url);
+      $('#content').insertAtCaret(tab.title + ' - ' + tab.url);
     });
   });
 };
