@@ -47,13 +47,13 @@ main = function() {
         }
 
         localStorage.setItem('blogName', blogName);
-        $('<h3>' + blogName + '</h3>').insertAfter('#top');
+        $('<h3>').text(blogName).insertAfter('#top');
       },
       error: function () {
       }
     });
   } else {
-    $('<h3>' + blogName + '</h3>').insertAfter('#top');
+    $('<h3>').text(blogName).insertAfter('#top');
   }
 
   $('#title').val(title);
