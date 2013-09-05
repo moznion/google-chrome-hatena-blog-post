@@ -23,7 +23,11 @@ $('#save').click(function () {
     datatype: 'xml',
     success: function (xmlData) {
       serviceDocument = xmlData;
-      blogName = $(serviceDocument).find('title').text();
+      blogName = $(serviceDocument).find('title')[0].textContent;
+
+      if (blogName.length >= 15) {
+        blogName = blogName.slice(0, 15) + '...';
+      }
 
       localStorage.setItem('blogName',    blogName);
       localStorage.setItem('userName',    userName);
