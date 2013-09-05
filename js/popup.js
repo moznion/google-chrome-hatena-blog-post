@@ -66,11 +66,16 @@ main = function() {
   sever = setInterval( function () {saveContents();}, 16);
 
   $('#submit').click(function () {
-    var title, content;
+    var title, content, isDraft;
     title   = $('#title').val();
     content = $('#content').val();
+    isDraft = 'no';
 
-    var xml = constructPostXML(userName, title, content, 'no');
+    if ($('#isDraft:checked').val() === 'yes') {
+      isDraft = 'yes';
+    }
+
+    var xml = constructPostXML(userName, title, content, isDraft);
     $.ajax({
       url:  endpointUrl + '/entry',
       type: 'post',
