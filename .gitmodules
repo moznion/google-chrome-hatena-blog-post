@@ -1,3 +1,0 @@
-[submodule "vendor/js/wsse-js"]
-	path = vendor/js/wsse-js
-	url = git@github.com:vrruiz/wsse-js.git
