@@ -28,7 +28,12 @@ main = function() {
       datatype: 'xml',
       success: function (xmlData) {
         serviceDocument = xmlData;
-        blogName = $(serviceDocument).find('title').text();
+        blogName = $(serviceDocument).find('title')[0].textContent;
+
+        if (blogName.length >= 15) {
+          blogName = blogName.slice(0, 15) + '...';
+        }
+
         localStorage.setItem('blogName', blogName);
         $('<h3>' + blogName + '</h3>').insertAfter('#top');
       },
@@ -99,6 +104,13 @@ main = function() {
       error: function () {
         $('body').append('<br><font color="red">Post failed...</font>');
       }
+    });
+  });
+
+  $('#pageInfo').click(function () {
+    chrome.tabs.getSelected(window.id, function (tab) {
+      var before = $('#content').val();
+      $('#content').val(before + "\n" + tab.title + ' - ' + tab.url);
     });
   });
 };
