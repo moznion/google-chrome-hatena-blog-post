@@ -21,8 +21,8 @@ view.$save.click(function () {
     userName    = view.$userName.val();
     apiKey      = view.$apiKey.val();
     endpointUrl = view.$endpointUrl.val();
-    doOpen      = $('#doOpen:checked').val();
-    doBreakLine = $('#doBreakLine:checked').val();
+    doOpen      = view.$doOpen.filter(':checked').val();
+    doBreakLine = view.$doBreakLine.filter(':checked').val();
 
     if (!(userName && apiKey && endpointUrl)) {
         return false;
