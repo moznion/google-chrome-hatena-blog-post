@@ -84,7 +84,7 @@ main = function() {
     localStorage.setItem('content', content);
     localStorage.setItem('isDraft', isDraft);
   };
-  sever = setInterval( function () {saveContents();}, 16);
+  sever = setInterval(saveContents, 1000);
 
   $('#submit').click(function () {
     var title, content, isDraft;
