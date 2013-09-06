@@ -10,8 +10,7 @@ main = function() {
         wHeader     = wsseHeader(userName, apiKey),
         saveContents,
         constructPostXML,
-        blogName,
-        saver;
+        blogName;
 
     $.fn.extend({
         insertAtCaret: function(v) {
@@ -26,9 +25,12 @@ main = function() {
     });
 
     var View = function () {
-        this.$title   = $('#title');
-        this.$content = $('#content');
-        this.$isDraft = $('#isDraft');
+        this.$title    = $('#title');
+        this.$content  = $('#content');
+        this.$isDraft  = $('#isDraft');
+        this.$submit   = $('#submit');
+        this.$pageInfo = $('#pageInfo');
+        this.$gist     = $('#gist');
     };
 
     View.prototype = {
@@ -109,24 +111,18 @@ main = function() {
     };
 
     saveContents = function() {
-        var title, content, isDraft;
-        title   = $('#title').val();
-        content = $('#content').val();
-        isDraft = $('#isDraft:checked').val();
-
-        localStorage.setItem('title', title);
-        localStorage.setItem('content', content);
-        localStorage.setItem('isDraft', isDraft);
+        localStorage.setItem('title',   view.$title.val());
+        localStorage.setItem('content', view.$content.val());
+        localStorage.setItem('isDraft', view.$isDraft.filter(':checked').val());
     };
-    saver = setInterval(saveContents, 1000);
+    var saver = setInterval(saveContents, 1000);
 
-    $('#submit').click(function () {
-        var title, content, isDraft;
-        title   = $('#title').val();
-        content = $('#content').val();
-        isDraft = 'no';
+    view.$submit.click(function () {
+        var title   = view.$title.val();
+        var content = view.$content.val();
+        var isDraft = 'no';
 
-        if ($('#isDraft:checked').val() === 'yes') {
+        if (view.$isDraft.filter(':checked').val() === 'yes') {
             isDraft = 'yes';
         }
 
@@ -152,7 +148,7 @@ main = function() {
                 localStorage.setItem('isDraft', '');
 
                 // 公開した場合は当該エントリを開く
-                if ($('#isDraft:checked').length !== 'yes' && localStorage.getItem('doOpen') === 'yes') {
+                if (view.$isDraft.filter(':checked').length !== 'yes' && localStorage.getItem('doOpen') === 'yes') {
                     $(xml_response).find('link').each(function (i,val) {
                         if($(val).attr('rel') === 'alternate'){
                             chrome.tabs.create({
@@ -171,16 +167,16 @@ main = function() {
         });
     });
 
-    $('#pageInfo').click(function () {
+    view.$pageInfo.click(function () {
         chrome.tabs.getSelected(window.id, function (tab) {
-            $('#content').insertAtCaret(tab.title + ' - ' + tab.url);
+            view.$content.insertAtCaret(tab.title + ' - ' + tab.url);
         });
     });
     chrome.tabs.getSelected(window.id, function (tab) {
         if(tab.url.indexOf('https://gist.github.com/') >= 0){
-            $('#gist').show().on('click', function () {
+            view.$gist.show().on('click', function () {
                 var gistId = tab.url.match(/^https:\/\/gist\.github\.com\/.*\/(\d*)/)[1];
-                $('#content').insertAtCaret('[gist:' + gistId + ']');
+                view.$content.insertAtCaret('[gist:' + gistId + ']');
             })
         }
     });
