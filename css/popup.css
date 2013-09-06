@@ -19,9 +19,9 @@ img#pageInfo {
   top:      20px;
   right:    30px;
 }
-input#gistBtn {
+img#gist {
   display:  none;
   position: absolute;
-  top:      45px;
+  top:      50px;
   right:    30px;
 }
