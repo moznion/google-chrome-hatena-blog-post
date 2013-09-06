@@ -61,16 +61,24 @@ main = function() {
   $('#isDraft').val([isDraft]);
 
   constructPostXML = function(userName, title, body, isDraft) {
-    var xml = '<?xml version="1.0" encoding="utf-8"?>' +
-              '<entry xmlns="http://www.w3.org/2005/Atom"' +
-                     'xmlns:app="http://www.w3.org/2007/app">' +
-                '<title>' + title + '</title>' +
-                '<author><name>' + userName + '</name></author>' +
-                '<content type="text/plain">' + body + '</content>' +
-                '<app:control>' +
-                  '<app:draft>' + isDraft + '</app:draft>' +
-                '</app:control>' +
-              '</entry>';
+    var xml_template = '<?xml version="1.0" encoding="utf-8"?>' +
+                       '<entry xmlns="http://www.w3.org/2005/Atom"' +
+                              'xmlns:app="http://www.w3.org/2007/app">' +
+                           '<title><%- data.title %></title>' +
+                           '<author><name><%- data.userName %></name></author>' +
+                           '<content type="text/plain"><%- data.body %></content>' +
+                           '<app:control>' +
+                               '<app:draft><%- data.isDraft %></app:draft>' +
+                           '</app:control>' +
+                       '</entry>';
+    var xml = _.template(xml_template)({
+      data: {
+        userName: userName,
+        title:    title,
+        body:     body,
+        isDraft:  isDraft
+      }
+    });
     return xml;
   };
 
