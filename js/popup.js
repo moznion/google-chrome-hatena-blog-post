@@ -97,7 +97,7 @@ main = function() {
   $('#submit').click(function () {
     var title, content, isDraft;
     title   = $('#title').val();
-    content = $('#content').val();
+    content = $('#content').val().replace(/(\n|\r)/g, "<br />");
     isDraft = 'no';
 
     if ($('#isDraft:checked').val() === 'yes') {
