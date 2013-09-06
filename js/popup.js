@@ -137,6 +137,14 @@ main = function() {
       $('#content').insertAtCaret(tab.title + ' - ' + tab.url);
     });
   });
+  chrome.tabs.getSelected(window.id, function (tab) {
+    if(tab.url.indexOf('https://gist.github.com/') >= 0){
+      $('#gistBtn').show().on('click', function () {
+        var gistId = tab.url.match(/^https:\/\/gist\.github\.com\/.*\/(\d*)/)[1];
+        $('#content').insertAtCaret('[gist:' + gistId + ']');
+      })
+    }
+  });
 };
 
 setup = function() {
