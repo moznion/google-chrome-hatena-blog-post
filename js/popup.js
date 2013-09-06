@@ -106,19 +106,24 @@ main = function() {
       contentType: 'text/xml;charset=UTF-8',
       datatype: 'xml',
       data: xml,
-      success: function () {
+      success: function (xml_response) {
         clearInterval(sever);
         localStorage.setItem('title', '');
         localStorage.setItem('content', '');
         localStorage.setItem('isDraft', '');
+
         // 公開した場合は当該エントリを開く
-        if($('#isDraft:checked').length == 0){
-            $(xml).find('link').each(function(i,val){
-                if($(val).attr('rel') === 'alternate'){
-                    window.open($(val).attr('href'));
-                }
-            });
+        if ($('#isDraft:checked').length !== 'yes' && localStorage.getItem('doOpen') === 'yes') {
+          $(xml_response).find('link').each(function (i,val) {
+            if($(val).attr('rel') === 'alternate'){
+              chrome.tabs.create({
+                url:      $(val).attr('href'),
+                selected: true
+              });
+            }
+          });
         }
+
         window.close();
       },
       error: function () {
