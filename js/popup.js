@@ -71,8 +71,8 @@ main = function() {
     constructPostXML = function(userName, title, body, isDraft) {
         var xml_template = '<?xml version="1.0" encoding="utf-8"?>' +
             '<entry xmlns="http://www.w3.org/2005/Atom"' +
-        'xmlns:app="http://www.w3.org/2007/app">' +
-        '<title><%- data.title %></title>' +
+            'xmlns:app="http://www.w3.org/2007/app">' +
+            '<title><%- data.title %></title>' +
             '<author><name><%- data.userName %></name></author>' +
             '<content type="text/plain"><%- data.body %></content>' +
             '<app:control>' +
