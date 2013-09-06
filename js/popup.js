@@ -13,7 +13,6 @@ main = function() {
         wHeader     = wsseHeader(userName, apiKey),
         saveContents,
         constructPostXML,
-        serviceDocument,
         blogName,
         saver;
 
@@ -29,32 +28,41 @@ main = function() {
         }
     });
 
-    blogName = localStorage.getItem('blogName');
-    if (!blogName) {
+    var prepareBlogTitle = function () {
+        var dfd = $.Deferred();
+
+        var blogName = localStorage.getItem('blogName');
+
+        if (blogName) {
+            dfd.resolve(blogName);
+            return dfd.promise();
+        }
+
         $.ajax({
             url:  endpointUrl,
             type: 'get',
             headers: {
                 'X-WSSE': wHeader
             },
-            datatype: 'xml',
-            success: function (xmlData) {
-                serviceDocument = xmlData;
-                blogName = $(serviceDocument).find('title')[0].textContent;
+            datatype: 'xml'
+        }).done(function (xmlServiceDocument) {
+            blogName = $(xmlServiceDocument).find('title')[0].textContent;
 
-                if (blogName.length >= 15) {
-                    blogName = blogName.slice(0, 15) + '...';
-                }
-
-                localStorage.setItem('blogName', blogName);
-                $('<h3>').text(blogName).insertAfter('#top');
-            },
-            error: function () {
+            if (blogName.length >= 15) {
+                blogName = blogName.slice(0, 15) + '...';
             }
+
+            localStorage.setItem('blogName', blogName);
+
+            dfd.resolve(blogName);
         });
-    } else {
+
+        return dfd.promise();
+    };
+
+    prepareBlogTitle().done(function (blogName) {
         $('<h3>').text(blogName).insertAfter('#top');
-    }
+    });
 
     $('#title').val(title);
     $('#content').val(content);
