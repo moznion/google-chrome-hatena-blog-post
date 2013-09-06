@@ -97,11 +97,16 @@ main = function() {
   $('#submit').click(function () {
     var title, content, isDraft;
     title   = $('#title').val();
-    content = $('#content').val().replace(/(\n|\r)/g, "<br />");
+    content = $('#content').val();
     isDraft = 'no';
 
     if ($('#isDraft:checked').val() === 'yes') {
       isDraft = 'yes';
+    }
+
+    // 見たままモード
+    if (localStorage.getItem('doBreakLine') === 'yes') {
+      content = content.replace(/(\n|\r)/g, "<br />");
     }
 
     var xml = constructPostXML(userName, title, content, isDraft);
