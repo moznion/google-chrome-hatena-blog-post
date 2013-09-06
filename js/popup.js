@@ -7,9 +7,6 @@ main = function() {
     var userName    = localStorage.getItem('userName'),
         apiKey      = localStorage.getItem('apiKey'),
         endpointUrl = localStorage.getItem('endpointUrl'),
-        title       = localStorage.getItem('title'),
-        content     = localStorage.getItem('content'),
-        isDraft     = localStorage.getItem('isDraft'),
         wHeader     = wsseHeader(userName, apiKey),
         saveContents,
         constructPostXML,
@@ -27,6 +24,24 @@ main = function() {
             o.setSelectionRange(np, np);
         }
     });
+
+    var View = function () {
+        this.$title   = $('#title');
+        this.$content = $('#content');
+        this.$isDraft = $('#isDraft');
+    };
+
+    View.prototype = {
+        entryTitlePrepared: function (title) {
+            this.$title.val(title);
+        },
+        entryContentPrepared: function (content) {
+            this.$content.val(content);
+        },
+        entryDraftPrepared: function (isDraft) {
+            this.$isDraft.val([isDraft]);
+        }
+    };
 
     var prepareBlogTitle = function () {
         var dfd = $.Deferred();
@@ -59,14 +74,17 @@ main = function() {
 
         return dfd.promise();
     };
-
     prepareBlogTitle().done(function (blogName) {
         $('<h3>').text(blogName).insertAfter('#top');
     });
 
-    $('#title').val(title);
-    $('#content').val(content);
-    $('#isDraft').val([isDraft]);
+    var view    = new View();
+    var title   = localStorage.getItem('title');
+    var content = localStorage.getItem('content');
+    var isDraft = localStorage.getItem('isDraft');
+    view.entryTitlePrepared(title);
+    view.entryContentPrepared(content);
+    view.entryDraftPrepared(isDraft);
 
     constructPostXML = function(userName, title, body, isDraft) {
         var xml_template = '<?xml version="1.0" encoding="utf-8"?>' +
