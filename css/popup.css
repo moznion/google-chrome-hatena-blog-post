@@ -19,3 +19,9 @@ img#pageInfo {
   top:      20px;
   right:    30px;
 }
+input#gistBtn {
+  display:  none;
+  position: absolute;
+  top:      45px;
+  right:    30px;
+}
