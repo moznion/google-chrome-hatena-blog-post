@@ -1,15 +1,26 @@
-$('#userName').val(localStorage.getItem('userName'));
-$('#apiKey').val(localStorage.getItem('apiKey'));
-$('#endpointUrl').val(localStorage.getItem('endpointUrl'));
-$('#doOpen').val([localStorage.getItem('doOpen')]);
-$('#doBreakLine').val([localStorage.getItem('doBreakLine')]);
+var View = function () {
+    this.$userName    = $('#userName');
+    this.$apiKey      = $('#apiKey');
+    this.$endpointUrl = $('#endpointUrl');
+    this.$doOpen      = $('#doOpen');
+    this.$doBreakLine = $('#doBreakLine');
+    this.$save        = $('#save');
+};
 
-$('#save').click(function () {
+var view = new View();
+
+view.$userName.val(localStorage.getItem('userName'));
+view.$apiKey.val(localStorage.getItem('apiKey'));
+view.$endpointUrl.val(localStorage.getItem('endpointUrl'));
+view.$doOpen.val([localStorage.getItem('doOpen')]);
+view.$doBreakLine.val([localStorage.getItem('doBreakLine')]);
+
+view.$save.click(function () {
     var userName, apiKey, endpointUrl, wHeader;
 
-    userName    = $('#userName').val();
-    apiKey      = $('#apiKey').val();
-    endpointUrl = $('#endpointUrl').val();
+    userName    = view.$userName.val();
+    apiKey      = view.$apiKey.val();
+    endpointUrl = view.$endpointUrl.val();
     doOpen      = $('#doOpen:checked').val();
     doBreakLine = $('#doBreakLine:checked').val();
 
@@ -40,11 +51,11 @@ $('#save').click(function () {
             localStorage.setItem('doOpen',      doOpen);
             localStorage.setItem('doBreakLine', doBreakLine);
 
-            $('#save').text('保存しました');
+            view.$save.text('保存しました');
             return true;
         },
         error: function () {
-            $('#save').text('設定を間違えています');
+            view.$save.text('設定を間違えています');
             return false;
         }
     });
