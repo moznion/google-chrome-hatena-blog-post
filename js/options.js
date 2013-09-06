@@ -1,6 +1,7 @@
 $('#userName').val(localStorage.getItem('userName'));
 $('#apiKey').val(localStorage.getItem('apiKey'));
 $('#endpointUrl').val(localStorage.getItem('endpointUrl'));
+$('#doOpen').val([localStorage.getItem('doOpen')]);
 
 $('#save').click(function () {
   var userName, apiKey, endpointUrl, wHeader;
@@ -8,6 +9,7 @@ $('#save').click(function () {
   userName    = $('#userName').val();
   apiKey      = $('#apiKey').val();
   endpointUrl = $('#endpointUrl').val();
+  doOpen      = $('#doOpen:checked').val();
 
   if (!(userName && apiKey && endpointUrl)) {
     return false;
@@ -33,6 +35,7 @@ $('#save').click(function () {
       localStorage.setItem('userName',    userName);
       localStorage.setItem('apiKey',      apiKey);
       localStorage.setItem('endpointUrl', endpointUrl);
+      localStorage.setItem('doOpen',      doOpen);
 
       $('#save').text('保存しました');
       return true;
