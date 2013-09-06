@@ -113,7 +113,7 @@ main = function() {
         localStorage.setItem('isDraft', '');
 
         // 公開した場合は当該エントリを開く
-        if ($('#isDraft:checked').length !== 'yes') {
+        if ($('#isDraft:checked').length !== 'yes' && localStorage.getItem('doOpen') === 'yes') {
           $(xml_response).find('link').each(function (i,val) {
             if($(val).attr('rel') === 'alternate'){
               chrome.tabs.create({
