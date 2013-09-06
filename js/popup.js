@@ -15,7 +15,7 @@ main = function() {
       constructPostXML,
       serviceDocument,
       blogName,
-      sever;
+      saver;
 
   $.fn.extend({
       insertAtCaret: function(v) {
@@ -92,7 +92,7 @@ main = function() {
     localStorage.setItem('content', content);
     localStorage.setItem('isDraft', isDraft);
   };
-  sever = setInterval(saveContents, 1000);
+  saver = setInterval(saveContents, 1000);
 
   $('#submit').click(function () {
     var title, content, isDraft;
@@ -115,7 +115,7 @@ main = function() {
       datatype: 'xml',
       data: xml,
       success: function (xml_response) {
-        clearInterval(sever);
+        clearInterval(saver);
         localStorage.setItem('title', '');
         localStorage.setItem('content', '');
         localStorage.setItem('isDraft', '');
