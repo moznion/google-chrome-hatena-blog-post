@@ -16,7 +16,7 @@ view.$doOpen.val([localStorage.getItem('doOpen')]);
 view.$doBreakLine.val([localStorage.getItem('doBreakLine')]);
 
 view.$save.click(function () {
-    var userName, apiKey, endpointUrl, wHeader;
+    var userName, apiKey, endpointUrl;
 
     userName    = view.$userName.val();
     apiKey      = view.$apiKey.val();
@@ -28,35 +28,41 @@ view.$save.click(function () {
         return false;
     }
 
-    wHeader = wsseHeader(userName, apiKey);
-    $.ajax({
-        url:  endpointUrl,
-        type: 'get',
-        headers: {
-            'X-WSSE': wHeader
-        },
-        datatype: 'xml',
-        success: function (xmlData) {
-            serviceDocument = xmlData;
-            blogName = $(serviceDocument).find('title')[0].textContent;
+    var prepareConfig = function () {
+        var dfd = $.Deferred();
+        var wHeader = wsseHeader(userName, apiKey);
+        $.ajax({
+            url:  endpointUrl,
+            type: 'get',
+            headers: {
+                'X-WSSE': wHeader
+            },
+            datatype: 'xml'
+        }).done(function (serviceDocument) {
+            dfd.resolve(serviceDocument);
+        }).fail(function () {
+            dfd.reject();
+        });
 
-            if (blogName.length >= 15) {
-                blogName = blogName.slice(0, 15) + '...';
-            }
+        return dfd.promise();
+    };
 
-            localStorage.setItem('blogName',    blogName);
-            localStorage.setItem('userName',    userName);
-            localStorage.setItem('apiKey',      apiKey);
-            localStorage.setItem('endpointUrl', endpointUrl);
-            localStorage.setItem('doOpen',      doOpen);
-            localStorage.setItem('doBreakLine', doBreakLine);
+    prepareConfig().done(function (serviceDocument) {
+        blogName = $(serviceDocument).find('title')[0].textContent;
 
-            view.$save.text('保存しました');
-            return true;
-        },
-        error: function () {
-            view.$save.text('設定を間違えています');
-            return false;
+        if (blogName.length >= 15) {
+            blogName = blogName.slice(0, 15) + '...';
         }
+
+        localStorage.setItem('blogName',    blogName);
+        localStorage.setItem('userName',    userName);
+        localStorage.setItem('apiKey',      apiKey);
+        localStorage.setItem('endpointUrl', endpointUrl);
+        localStorage.setItem('doOpen',      doOpen);
+        localStorage.setItem('doBreakLine', doBreakLine);
+
+        view.$save.text('保存しました');
+    }).fail(function () {
+        view.$save.text('設定を間違えています');
     });
 });
