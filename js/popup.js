@@ -4,10 +4,7 @@ var main = function () {
     var userName    = localStorage.getItem('userName'),
         apiKey      = localStorage.getItem('apiKey'),
         endpointUrl = localStorage.getItem('endpointUrl'),
-        wHeader     = wsseHeader(userName, apiKey),
-        saveContents,
-        constructPostXML,
-        blogName;
+        wHeader     = wsseHeader(userName, apiKey);
 
     $.fn.extend({
         insertAtCaret: function(v) {
@@ -46,7 +43,6 @@ var main = function () {
         var dfd = $.Deferred();
 
         var blogName = localStorage.getItem('blogName');
-
         if (blogName) {
             dfd.resolve(blogName);
             return dfd.promise();
@@ -60,14 +56,13 @@ var main = function () {
             },
             datatype: 'xml'
         }).done(function (xmlServiceDocument) {
-            blogName = $(xmlServiceDocument).find('title')[0].textContent;
+            var blogName = $(xmlServiceDocument).find('title')[0].textContent;
 
             if (blogName.length >= 15) {
                 blogName = blogName.slice(0, 15) + '...';
             }
 
             localStorage.setItem('blogName', blogName);
-
             dfd.resolve(blogName);
         });
 
@@ -85,7 +80,7 @@ var main = function () {
     view.entryContentPrepared(content);
     view.entryDraftPrepared(isDraft);
 
-    constructPostXML = function(userName, title, body, isDraft) {
+    var constructPostXML = function(userName, title, body, isDraft) {
         var xml_template = '<?xml version="1.0" encoding="utf-8"?>' +
             '<entry xmlns="http://www.w3.org/2005/Atom"' +
             'xmlns:app="http://www.w3.org/2007/app">' +
@@ -107,7 +102,7 @@ var main = function () {
         return xml;
     };
 
-    saveContents = function() {
+    var saveContents = function() {
         localStorage.setItem('title',   view.$title.val());
         localStorage.setItem('content', view.$content.val());
         localStorage.setItem('isDraft', view.$isDraft.filter(':checked').val());
