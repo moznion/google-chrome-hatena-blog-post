@@ -153,9 +153,9 @@ var main = function () {
 
         prepareSendEntry().done(function (xml_response) {
             clearInterval(saver);
-            localStorage.setItem('title', '');
-            localStorage.setItem('content', '');
-            localStorage.setItem('isDraft', '');
+            localStorage.removeItem('title');
+            localStorage.removeItem('content');
+            localStorage.removeItem('isDraft');
 
             // 公開した場合は当該エントリを開く
             if (view.$isDraft.filter(':checked').length !== 'yes' && localStorage.getItem('doOpen') === 'yes') {
