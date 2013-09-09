@@ -122,6 +122,7 @@ main = function() {
         var content = view.$content.val();
         var isDraft = 'no';
 
+        // 下書きモード
         if (view.$isDraft.filter(':checked').val() === 'yes') {
             isDraft = 'yes';
         }
@@ -132,38 +133,48 @@ main = function() {
         }
 
         var xml = constructPostXML(userName, title, content, isDraft);
-        $.ajax({
-            url:  endpointUrl + '/entry',
-            type: 'post',
-            headers: {
-                'X-WSSE': wHeader
-            },
-            contentType: 'text/xml;charset=UTF-8',
-            datatype: 'xml',
-            data: xml,
-            success: function (xml_response) {
-                clearInterval(saver);
-                localStorage.setItem('title', '');
-                localStorage.setItem('content', '');
-                localStorage.setItem('isDraft', '');
-
-                // 公開した場合は当該エントリを開く
-                if (view.$isDraft.filter(':checked').length !== 'yes' && localStorage.getItem('doOpen') === 'yes') {
-                    $(xml_response).find('link').each(function (i,val) {
-                        if($(val).attr('rel') === 'alternate'){
-                            chrome.tabs.create({
-                                url:      $(val).attr('href'),
-                                selected: true
-                            });
-                        }
-                    });
+        var prepareSendEntry = function () {
+            var dfd = $.Deferred();
+            $.ajax({
+                url:  endpointUrl + '/entry',
+                type: 'post',
+                headers: {
+                    'X-WSSE': wHeader
+                },
+                contentType: 'text/xml;charset=UTF-8',
+                datatype: 'xml',
+                data: xml,
+                success: function (xml_response) {
+                    dfd.resolve(xml_response);
+                },
+                error: function () {
+                    dfd.reject();
                 }
+            });
+            return dfd.promise();
+        };
 
-                window.close();
-            },
-            error: function () {
-                $('body').append('<br><font color="red">Post failed...</font>');
+        prepareSendEntry().done(function (xml_response) {
+            clearInterval(saver);
+            localStorage.setItem('title', '');
+            localStorage.setItem('content', '');
+            localStorage.setItem('isDraft', '');
+
+            // 公開した場合は当該エントリを開く
+            if (view.$isDraft.filter(':checked').length !== 'yes' && localStorage.getItem('doOpen') === 'yes') {
+                $(xml_response).find('link').each(function (i,val) {
+                    if($(val).attr('rel') === 'alternate'){
+                        chrome.tabs.create({
+                            url:      $(val).attr('href'),
+                            selected: true
+                        });
+                    }
+                });
             }
+
+            window.close();
+        }).fail(function () {
+            $('body').append('<br><font color="red">Post failed...</font>');
         });
     });
 
@@ -172,6 +183,7 @@ main = function() {
             view.$content.insertAtCaret(tab.title + ' - ' + tab.url);
         });
     });
+
     chrome.tabs.getSelected(window.id, function (tab) {
         if(tab.url.indexOf('https://gist.github.com/') >= 0){
             view.$gist.show().on('click', function () {
