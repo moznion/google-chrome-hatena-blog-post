@@ -1,7 +1,4 @@
-var main,
-setup;
-
-main = function() {
+var main = function () {
     "use strict";
 
     var userName    = localStorage.getItem('userName'),
@@ -178,23 +175,25 @@ main = function() {
         });
     });
 
+    // 閲覧中のページの情報をクリッピングする部分
     view.$pageInfo.click(function () {
         chrome.tabs.getSelected(window.id, function (tab) {
             view.$content.insertAtCaret(tab.title + ' - ' + tab.url);
         });
     });
 
+    // Gist 貼り付け
     chrome.tabs.getSelected(window.id, function (tab) {
-        if(tab.url.indexOf('https://gist.github.com/') >= 0){
+        if (tab.url.indexOf('https://gist.github.com/') >= 0) {
             view.$gist.show().on('click', function () {
                 var gistId = tab.url.match(/^https:\/\/gist\.github\.com\/.*\/(\d*)/)[1];
                 view.$content.insertAtCaret('[gist:' + gistId + ']');
-            })
+            });
         }
     });
 };
 
-setup = function() {
+var setup = function () {
     return chrome.tabs.create({
         url: chrome.extension.getURL('options.html')
     });
