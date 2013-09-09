@@ -102,7 +102,7 @@ var main = function () {
         return xml;
     };
 
-    var saveContents = function() {
+    var saveContents = function () {
         localStorage.setItem('title',   view.$title.val());
         localStorage.setItem('content', view.$content.val());
         localStorage.setItem('isDraft', view.$isDraft.filter(':checked').val());
@@ -163,10 +163,11 @@ var main = function () {
                     }
                 });
             }
-
             window.close();
         }).fail(function () {
-            $('body').append('<br><font color="red">Post failed...</font>');
+            var notification = $('<div>').addClass('notification');
+            notification.append('<font color="red">Post failed...</font>');
+            $('div.notification').replaceWith(notification);
         });
     });
 
