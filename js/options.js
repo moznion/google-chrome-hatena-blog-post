@@ -65,4 +65,6 @@ view.$save.click(function () {
     }).fail(function () {
         view.$save.text('設定を間違えています');
     });
+
+    return true;
 });
